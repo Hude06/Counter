@@ -99,6 +99,8 @@ async function getTodayCounts() {
   try {
     const response = await fetch('/api/counts');
     const data = await response.json();
+    document.getElementById("leaderboard-list").innerHTML = JSON.stringify(data, null, 2);
+    
     console.log('Today’s counts from server:', data);
     return data;
   } catch (err) {
