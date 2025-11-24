@@ -12,11 +12,30 @@
 <!-- iOS "Add to Home Screen" full-screen app mode -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="My App">
-
+<meta name="apple-mobile-web-app-title" content="Counter">
+<link rel="apple-touch-icon" href="./icon.png" sizes="180x180">
 <!-- Home screen icon -->
 
   <style>
+        html { -webkit-text-size-adjust: 100%; }
+
+    /* Prevent double-tap / pinch weirdness on many gestures */
+    html, body { touch-action: manipulation; }
+
+    /* Ensure interactive text is at least 16px (stops iOS auto-zoom on focus) */
+    input, textarea, select, button { font-size: 16px; }
+
+    /* Make small action buttons meet Apple touch target (min ~44px) */
+    #reset {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 10px 14px; /* bumped a bit for target + visual balance */
+    }
+
+    /* (your existing styles remain — the following is just example placement) */
+    :root { /* ... your variables ... */ }
+    *{box-sizing:border-box}
+    
     :root{
       --bg-1: #f6f8f9;        /* page background */
       --bg-2: #ffffff;        /* card / surface */
