@@ -1,49 +1,54 @@
 let push = document.getElementById("push");
 let pull = document.getElementById("pull");
 
-let pushCount = 0;
-let pullCount = 0;
+let alltimePushDIV = document.getElementById("pushalltime");
+let alltimePullDIV = document.getElementById("pullalltime");
 
-// Load today's counts
-fetch('/counts')
-  .then(res => res.json())
-  .then(data => {
-    pushCount = data.push;
-    pullCount = data.pull;
+let resetButton = document.getElementById("reset");
+resetButton.onclick = function() {
+    localStorage.removeItem("pushCount");
+    localStorage.removeItem("pullCount");
+    pushCount = 0;
+    pullCount = 0;
     push.innerText = pushCount;
     pull.innerText = pullCount;
-  });
+}
 
-// Increment push
+let alltimePush = 0
+let alltimePull = 0
+
+let pushCount = 0;
+let pullCount = 0;
+if (localStorage.getItem("pushCount")) {
+    pushCount = parseInt(localStorage.getItem("pushCount"));
+    push.innerText = pushCount;
+}
+if (localStorage.getItem("pullCount")) {
+    pullCount = parseInt(localStorage.getItem("pullCount"));
+    pull.innerText = pullCount;
+}
+if (localStorage.getItem("alltimePush")) {
+    alltimePush = parseInt(localStorage.getItem("alltimePush"));
+    alltimePushDIV.innerText = "ALL Time Pushups: " + alltimePush;
+}
+if (localStorage.getItem("alltimePull")) {
+    alltimePull = parseInt(localStorage.getItem("alltimePull"));
+    alltimePullDIV.innerText = "ALL Time Pullups: " + alltimePull;
+}
 push.onclick = function() {
-  pushCount += 1;
-  push.innerText = pushCount;
-
-  fetch('/counts', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ push: 1, pull: 0 })
-  });
+    pushCount += 1;
+    alltimePush += 1;
+    alltimePushDIV.innerText = "ALL Time Pushups: " + alltimePush;
+    push.innerText = pushCount;
+    localStorage.setItem("pushCount", pushCount);
+    localStorage.setItem("alltimePush", alltimePush);
 }
 
-// Increment pull
 pull.onclick = function() {
-  pullCount += 1;
-  pull.innerText = pullCount;
-
-  fetch('/counts', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ push: 0, pull: 1 })
-  });
-}
-
-// Reset button (optional)
-document.getElementById('reset').onclick = function() {
-  pushCount = 0;
-  pullCount = 0;
-  push.innerText = pushCount;
-  pull.innerText = pullCount;
-
-  fetch('/reset', { method: 'POST' });
+    pullCount += 1;
+    alltimePull += 1;
+    alltimePullDIV.innerText = "ALL Time Pullups: " + alltimePull;
+    pull.innerText = pullCount;
+    localStorage.setItem("pullCount", pullCount);
+    localStorage.setItem("alltimePull", alltimePull);
 }
