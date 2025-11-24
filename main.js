@@ -8,6 +8,10 @@ let resetButton = document.getElementById("reset");
 let resetAlltimeButton = document.getElementById("resetalltime");
 
 resetAlltimeButton.onclick = function() {
+    //prompt the user to confirm
+    if (!confirm("Are you sure you want to reset ALL TIME counts? This cannot be undone.")) {
+        return;
+    }
     localStorage.removeItem("alltimePush");
     localStorage.removeItem("alltimePull");
     alltimePush = 0;
@@ -16,6 +20,10 @@ resetAlltimeButton.onclick = function() {
     alltimePullDIV.innerText = "ALL Time Pullups: " + alltimePull;
 }
 resetButton.onclick = function() {
+    //prompt the user to confirm
+    if (!confirm("Are you sure you want to reset current counts? This cannot be undone.")) {
+        return;
+    }
     localStorage.removeItem("pushCount");
     localStorage.removeItem("pullCount");
     pushCount = 0;
