@@ -62,7 +62,7 @@
     .title { display:flex; flex-direction:column; gap:6px; }
     .title .brand { font-weight:700; font-size: clamp(18px, 2.6vw, 22px); letter-spacing: -0.02em; }
     .title .subtitle { color: var(--muted); font-size: clamp(12px, 1.8vw, 14px); }
-    #reset, #resetalltime{
+    #reset, #resetalltime, #reload{
       appearance:none;
       border:1px solid rgba(0,0,0,0.06);
       background: transparent;
@@ -73,7 +73,7 @@
       cursor:pointer;
       transition:transform .12s ease, box-shadow .12s ease, background .12s;
     }
-    #reset:hover, #resetalltime:hover{transform:translateY(-3px); box-shadow:var(--glass-shadow)}
+    #reset:hover, #reload, #resetalltime:hover{transform:translateY(-3px); box-shadow:var(--glass-shadow)}
     .stats {
       width:100%;
       display:grid;
@@ -144,6 +144,7 @@
 
       <button id="reset" title="Reset counts">Reset</button>
       <button id="resetalltime" title="Reset counts">Reset All Time</button>
+      <button id = "reload">Reload</button>
     </div>
 
     <section class="stats" aria-hidden="false">

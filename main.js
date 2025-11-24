@@ -11,7 +11,9 @@ let alltimePush = 0;
 let alltimePull = 0;
 let pushCount = 0;
 let pullCount = 0;
-
+document.getElementById("reload").onclick = function() {
+  location.reload();
+}
 // --- User ID for server ---
 let userId = localStorage.getItem("userId");
 if (!userId) {
@@ -100,7 +102,7 @@ async function getTodayCounts() {
     const response = await fetch('/api/counts');
     const data = await response.json();
     document.getElementById("leaderboard-list").innerHTML = JSON.stringify(data, null, 2);
-    
+
     console.log('Today’s counts from server:', data);
     return data;
   } catch (err) {
