@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join('./daily.json');
 
 app.use(bodyParser.json());
-app.use(express.static('public')); // serve your front-end if needed
+app.use(express.static('public')); // serve front-end if needed
 
 // Helper: read data
 function readData() {
@@ -26,39 +26,53 @@ function saveData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
 }
 
-// Reset daily counts (optional route)
-app.post('/reset', (req, res) => {
-  const data = readData();
-  const today = new Date().toISOString().slice(0, 10);
-  data[today] = { push: 0, pull: 0 };
-  saveData(data);
-  res.json({ success: true });
-});
+// Reset at midnight
+function scheduleMidnightReset() {
+  const now = new Date();
+  const msUntilMidnight = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1,
+    0, 0, 0, 0
+  ) - now;
 
-// Get today's counts
+  setTimeout(() => {
+    const data = readData();
+    const today = new Date().toISOString().slice(0, 10);
+    data[today] = {}; // reset counts for all users
+    saveData(data);
+    scheduleMidnightReset(); // schedule next reset
+    console.log('Daily pushups reset at midnight');
+  }, msUntilMidnight);
+}
+
+// Initialize midnight reset
+scheduleMidnightReset();
+
+// Get today's pushups
 app.get('/counts', (req, res) => {
   const data = readData();
   const today = new Date().toISOString().slice(0, 10);
-  if (!data[today]) data[today] = { push: 0, pull: 0 };
+  if (!data[today]) data[today] = {};
   res.json(data[today]);
 });
 
-// Update counts
+// Add pushups for a user
 app.post('/counts', (req, res) => {
-  const { push, pull } = req.body;
-  if (typeof push !== 'number' || typeof pull !== 'number') {
-    return res.status(400).json({ error: 'Invalid data' });
+  const { id, push } = req.body;
+  if (!id || typeof push !== 'number') {
+    return res.status(400).json({ error: 'Invalid data, need id and push number' });
   }
 
   const data = readData();
   const today = new Date().toISOString().slice(0, 10);
-  if (!data[today]) data[today] = { push: 0, pull: 0 };
+  if (!data[today]) data[today] = {};
 
-  data[today].push += push;
-  data[today].pull += pull;
+  if (!data[today][id]) data[today][id] = 0;
+  data[today][id] += push;
 
   saveData(data);
-  res.json(data[today]);
+  res.json({ id, push: data[today][id] });
 });
 
 app.listen(PORT, () => {

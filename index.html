@@ -14,44 +14,26 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Counter">
 <link rel="apple-touch-icon" href="./icon.png" sizes="180x180">
-<!-- Home screen icon -->
 
   <style>
-        html { -webkit-text-size-adjust: 100%; }
-
-    /* Prevent double-tap / pinch weirdness on many gestures */
+    html { -webkit-text-size-adjust: 100%; }
     html, body { touch-action: manipulation; }
-
-    /* Ensure interactive text is at least 16px (stops iOS auto-zoom on focus) */
     input, textarea, select, button { font-size: 16px; }
-
-    /* Make small action buttons meet Apple touch target (min ~44px) */
-    #reset {
-      min-height: 44px;
-      min-width: 44px;
-      padding: 10px 14px; /* bumped a bit for target + visual balance */
-    }
-
-    /* (your existing styles remain — the following is just example placement) */
-    :root { /* ... your variables ... */ }
+    #reset { min-height: 44px; min-width: 44px; padding: 10px 14px; }
     *{box-sizing:border-box}
-    
     :root{
-      --bg-1: #f6f8f9;        /* page background */
-      --bg-2: #ffffff;        /* card / surface */
-      --accent: #001A23;      /* dark accent */
-      --muted: #6b717e;       /* muted text */
-      --button: #C4D6B0;      /* primary button */
-      --button-tex: #001A23;  /* button text color */
+      --bg-1: #f6f8f9;
+      --bg-2: #ffffff;
+      --accent: #001A23;
+      --muted: #6b717e;
+      --button: #C4D6B0;
+      --button-tex: #001A23;
       --glass: rgba(255,255,255,0.6);
       --radius: 14px;
       --shadow: 0 6px 22px rgba(2,8,14,0.08);
       --glass-shadow: 0 8px 30px rgba(2,8,14,0.06);
       --gap: 20px;
     }
-
-    /* Reset + sensible defaults */
-    *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
@@ -65,8 +47,6 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
     }
-
-    /* App shell */
     .app{
       width: min(920px, 96vw);
       background: linear-gradient(180deg, rgba(255,255,255,0.9), var(--bg-2));
@@ -78,35 +58,11 @@
       gap: var(--gap);
       align-items:center;
     }
-
-    /* Top row: heading + reset button aligned right */
-    .top {
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:16px;
-    }
-
-    .title {
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    .title .brand {
-      font-weight:700;
-      font-size: clamp(18px, 2.6vw, 22px);
-      letter-spacing: -0.02em;
-    }
-
-    .title .subtitle {
-      color: var(--muted);
-      font-size: clamp(12px, 1.8vw, 14px);
-    }
-
-    /* Reset button — small but clear */
-    #reset{
+    .top { width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .title { display:flex; flex-direction:column; gap:6px; }
+    .title .brand { font-weight:700; font-size: clamp(18px, 2.6vw, 22px); letter-spacing: -0.02em; }
+    .title .subtitle { color: var(--muted); font-size: clamp(12px, 1.8vw, 14px); }
+    #reset, #resetalltime{
       appearance:none;
       border:1px solid rgba(0,0,0,0.06);
       background: transparent;
@@ -117,33 +73,13 @@
       cursor:pointer;
       transition:transform .12s ease, box-shadow .12s ease, background .12s;
     }
-    #reset:focus{outline:2px solid rgba(0,26,35,0.12); outline-offset:2px}
-    #reset:hover{transform:translateY(-3px); box-shadow:var(--glass-shadow)}
-    #reset:active{transform:translateY(0)}
-
-    #resetalltime{
-      appearance:none;
-      border:1px solid rgba(0,0,0,0.06);
-      background: transparent;
-      padding:8px 12px;
-      border-radius:10px;
-      font-weight:600;
-      color:var(--muted);
-      cursor:pointer;
-      transition:transform .12s ease, box-shadow .12s ease, background .12s;
-    }
-    #resetalltime:focus{outline:2px solid rgba(0,26,35,0.12); outline-offset:2px}
-    #resetalltime:hover{transform:translateY(-3px); box-shadow:var(--glass-shadow)}
-    #resetalltime:active{transform:translateY(0)}
-
-    /* Stats row */
+    #reset:hover, #resetalltime:hover{transform:translateY(-3px); box-shadow:var(--glass-shadow)}
     .stats {
       width:100%;
       display:grid;
       grid-template-columns: repeat(2, 1fr);
       gap:12px;
     }
-
     .stat {
       background: linear-gradient(180deg, rgba(196,214,176,0.12), rgba(196,214,176,0.06));
       border-radius:12px;
@@ -153,20 +89,8 @@
       gap:6px;
       align-items:flex-start;
     }
-
-    .stat .label {
-      font-size:12px;
-      color:var(--muted);
-      font-weight:600;
-    }
-
-    .stat .value {
-      font-size: clamp(18px, 3.4vw, 28px);
-      font-weight:700;
-      color: var(--accent);
-    }
-
-    /* Large buttons area */
+    .stat .label { font-size:12px; color:var(--muted); font-weight:600; }
+    .stat .value { font-size: clamp(18px, 3.4vw, 28px); font-weight:700; color: var(--accent); }
     .controls {
       width:100%;
       display:flex;
@@ -175,7 +99,6 @@
       align-items:center;
       padding-top:6px;
     }
-
     .track-btn {
       --size: clamp(120px, 22vw, 180px);
       width:var(--size);
@@ -195,17 +118,14 @@
     }
     .track-btn:active{ transform: translateY(1px) scale(.998) }
     .track-btn:hover{ transform: translateY(-6px); box-shadow: 0 18px 36px rgba(2,8,14,0.08) }
-    .track-btn:focus{ outline: 3px solid rgba(0,26,35,0.08); outline-offset:4px }
+    .btn-label { font-size:12px; color:var(--muted); margin-top:8px; text-align:center; }
 
-    /* Labels under buttons (optional small text) */
-    .btn-label {
-      font-size:12px;
-      color:var(--muted);
-      margin-top:8px;
-      text-align:center;
-    }
+    /* Leaderboard styles */
+    #leaderboard { width:100%; margin-top:30px; text-align:left; }
+    #leaderboard h2 { font-size:16px; font-weight:700; margin-bottom:8px; color:var(--accent); }
+    #leaderboard ol { padding-left:20px; margin:0; }
+    #leaderboard li { margin-bottom:4px; font-size:14px; color:var(--accent); }
 
-    /* Responsive stacking for small screens */
     @media (max-width:560px){
       .stats { grid-template-columns: 1fr; }
       .controls { flex-direction:column; }
@@ -223,8 +143,7 @@
       </div>
 
       <button id="reset" title="Reset counts">Reset</button>
-    <button id="resetalltime" title="Reset counts">Reset All Time</button>
-
+      <button id="resetalltime" title="Reset counts">Reset All Time</button>
     </div>
 
     <section class="stats" aria-hidden="false">
@@ -250,9 +169,16 @@
       </div>
     </section>
 
+    <!-- Daily leaderboard section -->
+    <section id="leaderboard">
+      <h2>Daily Leaderboard</h2>
+      <ol id="leaderboard-list">
+        <!-- JavaScript will populate leaderboard items here -->
+      </ol>
+    </section>
+
   </main>
 
-  <!-- Your main.js can attach listeners to #push, #pull, and #reset -->
   <script type="module" src="./main.js"></script>
 </body>
 </html>
