@@ -5,6 +5,16 @@ let alltimePushDIV = document.getElementById("pushalltime");
 let alltimePullDIV = document.getElementById("pullalltime");
 
 let resetButton = document.getElementById("reset");
+let resetAlltimeButton = document.getElementById("resetalltime");
+
+resetAlltimeButton.onclick = function() {
+    localStorage.removeItem("alltimePush");
+    localStorage.removeItem("alltimePull");
+    alltimePush = 0;
+    alltimePull = 0;
+    alltimePushDIV.innerText = "ALL Time Pushups: " + alltimePush;
+    alltimePullDIV.innerText = "ALL Time Pullups: " + alltimePull;
+}
 resetButton.onclick = function() {
     localStorage.removeItem("pushCount");
     localStorage.removeItem("pullCount");
