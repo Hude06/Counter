@@ -61,7 +61,7 @@ resetButton.onclick = function() {
 // --- Helper: send daily counts to server ---
 async function sendDailyCount(type, amount) {
   try {
-    const response = await fetch('/counts', {
+    const response = await fetch('/api/counts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: userId, push: type === 'push' ? amount : 0, pull: type === 'pull' ? amount : 0 })
@@ -97,7 +97,7 @@ pull.onclick = function() {
 // --- Fetch current daily counts from server (optional) ---
 async function getTodayCounts() {
   try {
-    const response = await fetch('/counts');
+    const response = await fetch('/api/counts');
     const data = await response.json();
     console.log('Today’s counts from server:', data);
     return data;
