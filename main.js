@@ -18,7 +18,7 @@ const chart = document.getElementById('mychart');
       labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
       datasets: [{
         label: '',
-        data: [12, 19, 3, 5, 2, 3],
+        data: [],
         borderWidth: 1
       }]
     },
