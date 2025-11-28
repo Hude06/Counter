@@ -11,25 +11,29 @@ let alltimePush = 0;
 let alltimePull = 0;
 let pushCount = 0;
 let pullCount = 0;
-const chart = document.getElementById('mychart');
-  new Chart(chart, {
-    type: 'doughnut',
-    data: {
-      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-      datasets: [{
-        label: '',
-        data: [],
-        borderWidth: 1
-      }]
+const chart = document.getElementById('mychart').getContext('2d');
+const myChart = new Chart(chart, {
+  type: 'bar', // better for multiple users
+  data: {
+    labels: [], // usernames will go here
+    datasets: [{
+      label: 'Pushups',
+      data: [],
+      backgroundColor: 'rgba(75, 192, 192, 0.6)',
     },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
+    {
+      label: 'Pullups',
+      data: [],
+      backgroundColor: 'rgba(153, 102, 255, 0.6)',
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { beginAtZero: true }
     }
-  });
+  }
+});
 document.getElementById("username").innerText = "Username: " + (localStorage.getItem("username") || "Guest");
 let username = localStorage.getItem("username")
 document.getElementById("setusername").onclick = function() {
@@ -121,23 +125,37 @@ pull.onclick = function() {
 };
 
 // --- Fetch current daily counts from server (optional) ---
-function updateChart(push, pull) {
-  chart.data.datasets[0].data = [push, pull];
-  chart.update();
-}
 async function getTodayCounts() {
   try {
     const response = await fetch('/api/counts');
     const data = await response.json();
-    document.getElementById("leaderboard-list").innerHTML = JSON.stringify(data, null, 2);
 
-    console.log('Today’s counts from server:', data);
-    const userdata = data[id] || { push: 0, pull: 0 };
-    updateChart(userdata.push, userdata.pull);
+    // Update leaderboard
+    const leaderboardList = document.getElementById("leaderboard-list");
+    leaderboardList.innerHTML = '';
+    for (let user in data) {
+      const li = document.createElement('li');
+      li.innerText = `${user} — Push: ${data[user].push}, Pull: ${data[user].pull}`;
+      leaderboardList.appendChild(li);
+    }
+
+    // Update chart
+    const labels = Object.keys(data);
+    const pushData = labels.map(u => data[u].push);
+    const pullData = labels.map(u => data[u].pull);
+
+    myChart.data.labels = labels;
+    myChart.data.datasets[0].data = pushData;
+    myChart.data.datasets[1].data = pullData;
+    myChart.update();
+
     return data;
   } catch (err) {
     console.error('Error fetching counts:', err);
   }
 }
 
+// Initial fetch
 getTodayCounts();
+// Poll every 5 seconds
+setInterval(getTodayCounts, 30000);
