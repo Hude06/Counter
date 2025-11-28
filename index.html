@@ -2,25 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- single, canonical viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Pull / Push Tracker</title>
 
   <!-- Optional: load Inter for a clean UI -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<!-- iOS "Add to Home Screen" full-screen app mode -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Counter">
-<link rel="apple-touch-icon" href="./icon.png" sizes="180x180">
+  <!-- iOS "Add to Home Screen" full-screen app mode (optional) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Counter">
+  <link rel="apple-touch-icon" href="./icon.png" sizes="180x180">
 
   <style>
+    /* basics */
     html { -webkit-text-size-adjust: 100%; }
-    html, body { touch-action: manipulation; }
+    html, body { touch-action: manipulation; height: 100%; }
     input, textarea, select, button { font-size: 16px; }
-    #reset { min-height: 44px; min-width: 44px; padding: 10px 14px; }
-    *{box-sizing:border-box}
+    * { box-sizing: border-box; }
+
     :root{
       --bg-1: #f6f8f9;
       --bg-2: #ffffff;
@@ -34,31 +35,47 @@
       --glass-shadow: 0 8px 30px rgba(2,8,14,0.06);
       --gap: 20px;
     }
-    html,body{height:100%}
+
+    /* Body: start at top and respect safe-area insets */
     body{
-      margin:0;
-      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background: linear-gradient(180deg, #f4f7f9 0%, var(--bg-1) 100%);
       color: var(--accent);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding: clamp(20px, 4vw, 48px);
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-      overflow: scroll;
+
+      display: flex;
+      align-items: flex-start;          /* start at top so nothing is centered under status bar */
+      justify-content: center;
+
+      /* add safe-area insets (env) so content isn't covered by notch/status bar */
+      padding-top: calc(env(safe-area-inset-top, 0px) + clamp(20px, 4vw, 48px));
+      padding-right: calc(env(safe-area-inset-right, 0px) + clamp(20px, 4vw, 48px));
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(20px, 4vw, 48px));
+      padding-left: calc(env(safe-area-inset-left, 0px) + clamp(20px, 4vw, 48px));
+
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+
+      /* only scroll when needed */
+      overflow: auto;
     }
+
+    /* main app card */
     .app{
       width: min(920px, 96vw);
+      max-width: 100%;
       background: linear-gradient(180deg, rgba(255,255,255,0.9), var(--bg-2));
       border-radius: 18px;
       box-shadow: var(--shadow);
       padding: clamp(18px, 3.2vw, 36px);
-      display:flex;
-      flex-direction:column;
+      display: flex;
+      flex-direction: column;
       gap: var(--gap);
-      align-items:center;
+      align-items: center;
+      margin-top: 0; /* explicit so top spacing comes from body padding */
     }
+
+    /* rest of your styles unchanged (kept for brevity) */
     .top { width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px; }
     .title { display:flex; flex-direction:column; gap:6px; }
     .title .brand { font-weight:700; font-size: clamp(18px, 2.6vw, 22px); letter-spacing: -0.02em; }
@@ -121,7 +138,6 @@
     .track-btn:hover{ transform: translateY(-6px); box-shadow: 0 18px 36px rgba(2,8,14,0.08) }
     .btn-label { font-size:12px; color:var(--muted); margin-top:8px; text-align:center; }
 
-    /* Leaderboard styles */
     #leaderboard { width:100%; margin-top:30px; text-align:left; }
     #leaderboard h2 { font-size:16px; font-weight:700; margin-bottom:8px; color:var(--accent); }
     #leaderboard ol { padding-left:20px; margin:0; }
@@ -136,7 +152,6 @@
 </head>
 <body>
   <main class="app" role="application" aria-labelledby="app-title">
-
     <div class="top">
       <div class="title">
         <div id="app-title" class="brand">Pull / Push Tracker</div>
@@ -145,7 +160,7 @@
 
       <button id="reset" title="Reset counts">Reset</button>
       <button id="resetalltime" title="Reset counts">Reset All Time</button>
-      <button id = "reload">Reload</button>
+      <button id="reload">Reload</button>
     </div>
 
     <section class="stats" aria-hidden="false">
@@ -171,14 +186,10 @@
       </div>
     </section>
 
-    <!-- Daily leaderboard section -->
     <section id="leaderboard">
       <h2>Daily Leaderboard</h2>
-      <ol id="leaderboard-list">
-        <!-- JavaScript will populate leaderboard items here -->
-      </ol>
+      <ol id="leaderboard-list"></ol>
     </section>
-
   </main>
 
   <script type="module" src="./main.js"></script>
