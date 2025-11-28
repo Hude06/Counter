@@ -112,6 +112,7 @@ push.onclick = function() {
   localStorage.setItem("pushCount", pushCount);
   localStorage.setItem("alltimePush", alltimePush);
   sendDailyCount('push', 1);
+  getTodayCounts();
 };
 
 pull.onclick = function() {
@@ -122,6 +123,7 @@ pull.onclick = function() {
   localStorage.setItem("pullCount", pullCount);
   localStorage.setItem("alltimePull", alltimePull);
   sendDailyCount('pull', 1);
+  getTodayCounts();
 };
 
 // --- Fetch current daily counts from server (optional) ---
