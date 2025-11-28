@@ -11,15 +11,20 @@ let alltimePush = 0;
 let alltimePull = 0;
 let pushCount = 0;
 let pullCount = 0;
+document.getElementById("username").innerText = "Username: " + (localStorage.getItem("username") || "Guest");
+let username = localStorage.getItem("username")
+document.getElementById("setusername").onclick = function() {
+  let newName = prompt("Enter your username:", username || "Guest");
+  if (newName) {
+    localStorage.setItem("username", newName);
+    username = newName
+    document.getElementById("username").innerText = "Username: " + newName;
+  }
+}
 document.getElementById("reload").onclick = function() {
   location.reload();
 }
 // --- User ID for server ---
-let userId = localStorage.getItem("userId");
-if (!userId) {
-  userId = 'user-' + Math.random().toString(36).substring(2, 10);
-  localStorage.setItem("userId", userId);
-}
 
 // --- Load local counts ---
 if (localStorage.getItem("pushCount")) {
@@ -66,7 +71,7 @@ async function sendDailyCount(type, amount) {
     const response = await fetch('/api/counts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: userId, push: type === 'push' ? amount : 0, pull: type === 'pull' ? amount : 0 })
+      body: JSON.stringify({ id: username, push: type === 'push' ? amount : 0, pull: type === 'pull' ? amount : 0 })
     });
     const data = await response.json();
     console.log('Server daily count updated:', data);

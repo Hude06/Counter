@@ -80,7 +80,7 @@
     .title { display:flex; flex-direction:column; gap:6px; }
     .title .brand { font-weight:700; font-size: clamp(18px, 2.6vw, 22px); letter-spacing: -0.02em; }
     .title .subtitle { color: var(--muted); font-size: clamp(12px, 1.8vw, 14px); }
-    #reset, #resetalltime, #reload{
+    #reset, #resetalltime, #reload,.navButt{
       appearance:none;
       border:1px solid rgba(0,0,0,0.06);
       background: transparent;
@@ -161,9 +161,13 @@
       <button id="reset" title="Reset counts">Reset</button>
       <button id="resetalltime" title="Reset counts">Reset All Time</button>
       <button id="reload">Reload</button>
+      <button class="navButt" id = "setusername">Set Username</button>
     </div>
 
     <section class="stats" aria-hidden="false">
+      <div class = "stat">
+        <div class = "value" id = "username">Username: </div>
+      </div>
       <div class="stat">
         <div class="label">Pullups (All time)</div>
         <div id="pullalltime" class="value">0</div>
