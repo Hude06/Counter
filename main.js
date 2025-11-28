@@ -11,6 +11,25 @@ let alltimePush = 0;
 let alltimePull = 0;
 let pushCount = 0;
 let pullCount = 0;
+const chart = document.getElementById('mychart');
+  new Chart(chart, {
+    type: 'doughnut',
+    data: {
+      labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+      datasets: [{
+        label: '',
+        data: [12, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
 document.getElementById("username").innerText = "Username: " + (localStorage.getItem("username") || "Guest");
 let username = localStorage.getItem("username")
 document.getElementById("setusername").onclick = function() {
@@ -102,6 +121,10 @@ pull.onclick = function() {
 };
 
 // --- Fetch current daily counts from server (optional) ---
+function updateChart(push, pull) {
+  chart.data.datasets[0].data = [push, pull];
+  chart.update();
+}
 async function getTodayCounts() {
   try {
     const response = await fetch('/api/counts');
@@ -109,6 +132,8 @@ async function getTodayCounts() {
     document.getElementById("leaderboard-list").innerHTML = JSON.stringify(data, null, 2);
 
     console.log('Today’s counts from server:', data);
+    const userdata = data[id] || { push: 0, pull: 0 };
+    updateChart(userdata.push, userdata.pull);
     return data;
   } catch (err) {
     console.error('Error fetching counts:', err);
